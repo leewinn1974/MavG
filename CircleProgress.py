@@ -38,10 +38,6 @@ class CircularProgressBar(ProgressBar):
             Ellipse(pos=self.pos, size=self.size, angle_start =-90, angle_end =90)
 
             # Draw progress circle, small hack if there is no progress (angle_end = 0 results in full progress)
-            if self.value_normalized == 0.5:
-                print("Brake Here")
-            if self.value_normalized == 1:
-                print("Brake Here")
 
             Color(1, 0, 0)
             Ellipse(pos=self.pos, size=self.size, angle_start = -90,
