@@ -1,0 +1,58 @@
+#:import Factory kivy.factory.Factory
+
+
+BoxLayout:
+    
+    orientation: 'vertical'
+    spacing: -500
+    size: root.size
+    padding: 10
+                 
+
+    SpeedMeter:
+        
+        value:3000 #from set_rpm
+        min:0
+        max:7000
+        tick:1000
+        start_angle: -90
+        end_angle: 90
+        subtick: 5
+        value_font_size: 14
+        display_first: False
+        display_last: False
+        label_font_size: 20
+        label: 'RPM: ' + str(self.value)
+        sectors: [3000, '#ffffff', 3200, '#00ff00', 5500, '#ff0000', 5520]
+        needle_color: '#FFA500'
+            
+        sector_width: 4
+
+    SpeedMeter:
+        
+        value:90 #from set_temp
+        min:0
+        max:250
+        tick:50
+        start_angle: 270
+        end_angle: 90
+        subtick: 5
+        value_font_size: 14
+        display_first: False
+        display_last: False
+        label_font_size: 20
+        label: 'CHT: ' + str(self.value) + '\xb0C'
+        sectors: [80, '#ffffff', 85, '#00ff00', 180, '#ff0000', 190]
+        needle_color: '#FFA500'
+            
+        sector_width: 4
+           
+       
+    
+
+    
+       
+
+      
+
+       
