@@ -59,7 +59,15 @@ class CircularProgressBar(ProgressBar):
                     size=(self.size[0] - self.thickness, self.size[1] - self.thickness))
 
             # Center and draw the progress text
-            Color(1, 1, 1, 1)
+
+            if self.value_normalized*100 >=30 and self.value_normalized*100 <=70:
+                tx_color=(1,1,0)
+            elif self.value_normalized*100 >=70:
+                tx_color=(1,0,0)
+            else:
+                tx_color=(1,1,1)
+
+            Color(tx_color[0], tx_color[1], tx_color[2], 1)
             #added pos[0]and pos[1] for centralizing label text whenever pos_hint is set
             Rectangle(texture=self.label.texture, size=self.texture_size,
                   pos=(self.size[0] / 2 - self.texture_size[0] / 2 + self.pos[0], self.size[1] / 2 - self.texture_size[1] / 2 + self.pos[1]))
