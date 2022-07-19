@@ -12,7 +12,7 @@ class CircularProgressBar(ProgressBar):
         super(CircularProgressBar, self).__init__(**kwargs)
 
         # Set constant for the bar thickness
-        self.thickness = 30
+        self.thickness = 60
 
         # Create a direct text representation
         self.label = CoreLabel(text="0%", font_size=self.thickness)
@@ -39,7 +39,16 @@ class CircularProgressBar(ProgressBar):
 
             # Draw progress circle, small hack if there is no progress (angle_end = 0 results in full progress)
 
-            Color(1, 0, 0)
+
+            # Color changing based on value
+            if self.value_normalized*100 >=30 and self.value_normalized*100 <=70:
+                pg_color=(1,1,0)
+            elif self.value_normalized*100 >=70:
+                pg_color=(1,0,0)
+            else:
+                pg_color=(0,1,0)
+            
+            Color(pg_color[0],pg_color[1],0)
             Ellipse(pos=self.pos, size=self.size, angle_start = -90,
                     angle_end = (0.01 if self.value_normalized == 0.5 else (self.value_normalized*180)-90))
                 # This value needs to be 0.01 to fix a graphical rendering discontunity at 0
