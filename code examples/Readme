@@ -1,0 +1,9 @@
+In order for the speedmeter code to work, you have to have speedmeter installed:
+
+First install kivy garden.
+
+Clone the speedmeter repo
+
+Build the setup.py file
+
+install
