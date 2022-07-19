@@ -10,7 +10,7 @@ Kivy and mavlink must be installed
 The indicators can be tested using Mission Planner on windows machines:
  Open a simulator 
  Start Mavlink Mirror:
-  TCP Host : 14551 (this port is what is in the code currently)
+  TCP Host : 14550
 
 Testing under Linux requires the Ardupilot SITL to be running.
 
