@@ -22,7 +22,7 @@ def run_mavlink_reciever():
         velocity = the_connection.recv_match(type='GPS_RAW_INT', blocking=True).vel
         
         print_txt = 'GPS Time: ' + str(time)    
-        print_txt = 'Vel: ' + str(velocity)
+        print_txt_vel = 'Vel: ' + str(velocity)
 
 
         #print(msg)
@@ -31,8 +31,8 @@ def run_mavlink_reciever():
         #     velocity=msg.vel
         #     print_txt = 'GPS Time: '+ str(time)
         #     print_txt_vel = 'GPS Vel: '+ str(velocity)
-        # app.root.gps_text.text = print_txt
-        # app.root.vel_text.text = print_txt_vel
+        app.root.gps_text.text = print_txt
+        app.root.vel_text.text = print_txt_vel
             #print(print_txt)
         
 
