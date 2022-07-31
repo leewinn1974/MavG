@@ -1,0 +1,80 @@
+#:kivy 1.0
+
+BoxLayout:
+    orientation: 'vertical' 
+
+    # Warning "lights"
+    GridLayout:
+        size_hint_y: .1
+        cols: 4
+        rows: 1        
+        rows_force_default: True
+        rows_default_height: 40   
+        padding: 3     
+
+        Button:
+            id: link
+            size_hint_y: None
+            height: 35          
+            text: 'Link'           
+
+        Button:
+            id: rpm_warn    
+            size_hint_y: None
+            height: 35
+            text: 'RPM'
+
+        Button:
+            id: temp_warn            
+            size_hint_y: None
+            height: 35
+            text: 'Temp'
+
+        Button:
+            id: batt_warn
+            size_hint_y: None
+            height: 35
+            text: 'Batt'          
+
+    # Main indicator area
+    GridLayout:
+        cols: 2        
+        row_force_default: True
+        row_default_height: 400
+        padding: 3
+
+        BoxLayout:
+            orientation: 'vertical'            
+            spacing: -375      
+
+            SpeedMeter:
+                id: tach
+                value: 6.5
+                max: 10
+                tick: 1
+                subtick: 2
+                display_first: False
+                display_last: False
+                end_angle: 90
+                label: 'RPM x1000'
+                needle_color: '#FFA500'
+
+            SpeedMeter:
+                id: cht
+                value: 172
+                max: 360
+                tick: 60
+                display_first: False
+                display_last: False
+                start_angle: 270
+                end_angle: 90
+                label: 'CHT'
+                needle_color: '#FFA500'
+      
+
+        
+
+            
+
+       
+    
