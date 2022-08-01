@@ -2,10 +2,10 @@
 
 BoxLayout:
     orientation: 'vertical' 
-
+    
     # Warning "lights"
     GridLayout:
-        size_hint_y: .1
+        size_hint_y: .3
         cols: 4
         rows: 1        
         rows_force_default: True
@@ -38,7 +38,8 @@ BoxLayout:
 
     # Main indicator area
     GridLayout:
-        cols: 2        
+        cols: 2    
+        size_hint_y: 2
         row_force_default: True
         row_default_height: 400
         padding: 3
@@ -48,8 +49,7 @@ BoxLayout:
             spacing: -375      
 
             SpeedMeter:
-                id: tach
-                value: 6.5
+                id: tach                
                 max: 10
                 tick: 1
                 subtick: 2
@@ -60,8 +60,7 @@ BoxLayout:
                 needle_color: '#FFA500'
 
             SpeedMeter:
-                id: cht
-                value: 172
+                id: cht                
                 max: 360
                 tick: 60
                 display_first: False
@@ -70,8 +69,50 @@ BoxLayout:
                 end_angle: 90
                 label: 'CHT'
                 needle_color: '#FFA500'
-      
+    
+    GridLayout:
+        cols: 2
+        padding: 3
+        row_force_default: True
+        row_default_height: 200
 
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: -180
+            SpeedMeter:
+                id: level
+                start_angle: -90
+                end_angle: 90
+                display_first: False
+                display_last: False
+                needle_color: '#FFA500'
+
+            SpeedMeter:
+                id: flow
+                start_angle: 270
+                end_angle: 90
+                display_first: False
+                display_last: False
+                needle_color: '#FFA500'
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: -180
+            SpeedMeter:
+                id: batt1
+                start_angle: -90
+                end_angle: 90
+                display_first: False
+                display_last: False
+                needle_color: '#FFA500'
+
+            SpeedMeter:
+                id: batt2
+                start_angle: 270
+                end_angle: 90
+                display_first: False
+                display_last: False
+                needle_color: '#FFA500'
         
 
             

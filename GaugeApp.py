@@ -4,6 +4,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy_garden.speedmeter import SpeedMeter
+from CircleProg import CircProg
 from kivy.clock import Clock
 from pymavlink import mavutil
 
@@ -47,7 +48,7 @@ class GaugeApp(App):
         ids = self.root.ids
         
         # Tach value - TESTING VALUE 
-        tach_val = 8.5 # self.connection.recv_match(type='',blocking=True).a # value
+        tach_val = 8.5 # self.connection.recv_match(type='',blocking=True).a value
         ids.tach.value = tach_val # temporary value
         
         # Set Tach ranges and call warn_mgr - CURRENT RANGES FOR TESTING ONLY
@@ -88,6 +89,10 @@ class GaugeApp(App):
         
     # This sets values and defines ranges for the secondary indicators
     def secondary_update(self,dt):
+        ids=self.root.ids
+        ids.level.value = 30
+        ids.batt2.value = 70
+        
         
         # Other indicators - TBD (likely vertical progress bar style)
         # warn_mgr may need to be modified to accomodate this
