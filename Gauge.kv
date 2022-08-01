@@ -5,7 +5,7 @@ BoxLayout:
     
     # Warning "lights"
     GridLayout:
-        size_hint_y: .3
+        size_hint_y: .2
         cols: 4
         rows: 1        
         rows_force_default: True
@@ -37,59 +37,64 @@ BoxLayout:
             text: 'Batt'          
 
     # Main indicator area
-    GridLayout:
-        cols: 2    
-        size_hint_y: 2
-        row_force_default: True
-        row_default_height: 400
-        padding: 3
+    BoxLayout:
+        orientation: 'vertical' 
+        size_hint_y: 1.5           
+        spacing: -400   
+        padding: 3  
 
-        BoxLayout:
-            orientation: 'vertical'            
-            spacing: -375      
+        SpeedMeter:
+            id: tach                
+            max: 10
+            tick: 1
+            subtick: 2
+            display_first: False
+            display_last: False
+            end_angle: 90
+            label: 'RPM x1000'
+            needle_color: '#FFA500'
 
-            SpeedMeter:
-                id: tach                
-                max: 10
-                tick: 1
-                subtick: 2
-                display_first: False
-                display_last: False
-                end_angle: 90
-                label: 'RPM x1000'
-                needle_color: '#FFA500'
-
-            SpeedMeter:
-                id: cht                
-                max: 360
-                tick: 60
-                display_first: False
-                display_last: False
-                start_angle: 270
-                end_angle: 90
-                label: 'CHT'
-                needle_color: '#FFA500'
+        SpeedMeter:
+            id: cht                
+            max: 360
+            tick: 60
+            display_first: False
+            display_last: False
+            start_angle: 270
+            end_angle: 90
+            label: 'CHT'
+            needle_color: '#FFA500'
     
+   
+
     # Seconday Indicators - Indicator types (id) can be changed to fit whatever is needed
     GridLayout:
         cols: 2
-        padding: 3
-        row_force_default: True
-        row_default_height: 200
-
+        padding: 6
+                       
         BoxLayout:
             orientation: 'vertical'
-            spacing: -180
-            SpeedMeter:
+            spacing: -250
+            padding: 3
+            
+            FuelMarksSpeedMeter:
                 id: level
+                label: 'Fuel Level'
+                tick: 25
+                subtick: 2
                 start_angle: -90
                 end_angle: 90
                 display_first: False
                 display_last: False
+                shadow_color: '00ff00'
                 needle_color: '#FFA500'
 
             SpeedMeter:
                 id: flow
+                value: 6
+                max:10
+                tick: 2
+                label: 'Fuel Flow\n' +'   %d' % (self.value) +' l/h'                
                 start_angle: 270
                 end_angle: 90
                 display_first: False
@@ -98,9 +103,15 @@ BoxLayout:
 
         BoxLayout:
             orientation: 'vertical'
-            spacing: -180
+            spacing: -250
+            padding: 3
+
             SpeedMeter:
                 id: batt1
+                label: 'Battery 1'
+                max: 60
+                tick: 10
+                subtick: 2
                 start_angle: -90
                 end_angle: 90
                 display_first: False
@@ -108,7 +119,11 @@ BoxLayout:
                 needle_color: '#FFA500'
 
             SpeedMeter:
-                id: batt2
+                id: batt2                
+                label: 'Battery 2'
+                max: 30
+                tick: 5
+                subtick: 2
                 start_angle: 270
                 end_angle: 90
                 display_first: False

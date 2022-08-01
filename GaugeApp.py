@@ -4,11 +4,15 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy_garden.speedmeter import SpeedMeter
-from CircleProg import CircProg
 from kivy.clock import Clock
 from pymavlink import mavutil
 
 
+_fuel_marks = {25:'1/4', 50:'1/2', 75:'3/4'}
+class FuelMarksSpeedMeter(SpeedMeter):
+    # Removes text from the ticks
+    def value_str(self, n): 
+        return _fuel_marks.get(n, '')
   
 class GaugeApp(App):
     def __init__(self, **kwargs):
@@ -48,7 +52,7 @@ class GaugeApp(App):
         ids = self.root.ids
         
         # Tach value - TESTING VALUE 
-        tach_val = 8.5 # self.connection.recv_match(type='',blocking=True).a value
+        tach_val = 5 # self.connection.recv_match(type='',blocking=True).a value
         ids.tach.value = tach_val # temporary value
         
         # Set Tach ranges and call warn_mgr - CURRENT RANGES FOR TESTING ONLY
@@ -90,8 +94,13 @@ class GaugeApp(App):
     # This sets values and defines ranges for the secondary indicators
     def secondary_update(self,dt):
         ids=self.root.ids
-        ids.level.value = 30
-        ids.batt2.value = 70
+        ids.level.value = 30 # Test Value
+        ids.batt2.value = 20 # Test Value
+        
+        if ids.batt2.value < 21.9:  # Warning example
+            ids.batt2.cadran_color = '#e2ff19ff'
+            id=ids.batt_warn
+            self.warn_mgr(id, 'yellow')
         
         
         # Other indicators - TBD (likely vertical progress bar style)
