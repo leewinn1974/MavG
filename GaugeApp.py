@@ -56,13 +56,13 @@ class GaugeApp(App):
         if color == 'red':
             id.background_color = _rgba_colors['red']       
             
-    # This set values and defines ranges for the primary gauges <-Does not work on sim due to the EFI_STATUS not in the MavLink stream.
+    # This set values and defines ranges for the primary gauges
     def primary_update(self,dt):        
         ids=self.root.ids
         
         # Tach value
         try:           
-            tach_val = self.connection.messages['EFI_STATUS'].rpm #-uncomment and remove the '0' to use.
+            tach_val = self.connection.messages['EFI_STATUS'].rpm 
             ids.tach.value = tach_val 
         except:
             tach_value = 0
