@@ -27,20 +27,22 @@ class GaugeApp(App):
     def start_connection(self):
             ids = self.root.ids
             connection_attempts = 0
-            link_warn=ids.link                        
+            link_warn=ids.link 
+            ids.link.disabled = True                       
             
             while connection_attempts < 3:                                               
                 connection_attempts += 1                        
-                try:
+                try:                    
                     self.connection = mavutil.mavlink_connection('tcp:localhost:14550')
                     self.connection.wait_heartbeat()
                     ids.link.text = 'Connected'
-                    self.warn_mgr(link_warn, 'green')
+                    self.warn_mgr(link_warn, 'green')                    
                     Clock.schedule_once(self.scheduler, 0.1)                                
                     
                 except:
                     ids.link.text = 'Retry?'
                     self.warn_mgr(link_warn, 'red')
+                    ids.link.disabled = False
                     # Needs "Connection Failed" PopUp                    
                     
     # This manages the color of the warning "lights" at the top of the panel        
