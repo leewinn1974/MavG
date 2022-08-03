@@ -1,4 +1,5 @@
 #:kivy 1.0
+#:import Factory kivy.factory.Factory
 
 BoxLayout:
     orientation: 'vertical' 
@@ -16,25 +17,33 @@ BoxLayout:
             id: link
             size_hint_y: None
             height: 35          
-            text: 'Link'           
+            text: 'Connect'
+            on_press: 
+                self.background_color = [255,255,0,1]
+                self.color = [0,0,0]
+                self.text = 'Trying'
+            on_release: app.start_connection()          
 
         Button:
-            id: rpm_warn    
+            id: fuel_warn    
             size_hint_y: None
             height: 35
-            text: 'RPM'
+            text: 'Set Fuel'
+            on_press:
+                self.text = 'Fuel'
+            on_release: Factory.fuelPopup().open()
 
         Button:
             id: temp_warn            
             size_hint_y: None
             height: 35
-            text: 'Temp'
+            # text: 'Temp'
 
         Button:
             id: batt_warn
             size_hint_y: None
             height: 35
-            text: 'Batt'          
+            # text: 'Batt'          
 
     # Main indicator area
     BoxLayout:
@@ -53,6 +62,8 @@ BoxLayout:
             end_angle: 90
             label: 'RPM x1000'
             needle_color: '#FFA500'
+            sectors: [3, '#ffffff', 3.2, '#00ff00', 8, '#ffff00', 8.5, '#ff0000', 8.8]            
+            sector_width: 4
 
         SpeedMeter:
             id: cht                
@@ -64,8 +75,8 @@ BoxLayout:
             end_angle: 90
             label: 'CHT'
             needle_color: '#FFA500'
-    
-   
+            sectors: [77, '#ffffff', 80, '#00ff00', 180, '#ffff00', 200, '#ff0000', 220]            
+            sector_width: 4   
 
     # Seconday Indicators - Indicator types (id) can be changed to fit whatever is needed
     GridLayout:
@@ -85,16 +96,14 @@ BoxLayout:
                 start_angle: -90
                 end_angle: 90
                 display_first: False
-                display_last: False
-                shadow_color: '00ff00'
+                display_last: False                
                 needle_color: '#FFA500'
 
             SpeedMeter:
-                id: flow
-                value: 6
+                id: flow                
                 max:10
                 tick: 2
-                label: 'Fuel Flow\n' +'   %d' % (self.value) +' l/h'                
+                label: 'Fuel Flow\n' + '   %d' % (self.value) + ' l/h'                
                 start_angle: 270
                 end_angle: 90
                 display_first: False
@@ -129,7 +138,35 @@ BoxLayout:
                 display_first: False
                 display_last: False
                 needle_color: '#FFA500'
-        
+
+<fuelPopup@Popup>:
+    auto_dismiss: False
+    title: 'Fuel Set'
+    size_hint: (None, None)
+    size: (300, 200)
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            pos_hint: { 'center_y': 0.5 }
+            text: 'Enter Fuel Onboard in Liters:'
+        TextInput:
+            id: fuel_in
+            multiline: False
+            font_size: 20
+            text: ''
+            
+            # In progress
+
+        Button:
+            size_hint: (1, 1)
+            pos_hint: { 'center_x': 0.5 }
+            text: 'Save'
+            on_release:
+                value_text = (fuel_in.text)
+                app.fuel_level_set(float(value_text))                               
+                root.dismiss()        
 
             
 
