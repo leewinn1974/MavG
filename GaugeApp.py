@@ -92,18 +92,30 @@ class GaugeApp(App):
         ids = self.root.ids
         
     # Fuel level calc<-- if available
-        try: 
-            used = (self.connection.messages['EFI_STATUS'].fuel_consumed)* 100                        
+        try:    
+            fuel_list =[] 
+            used_total = (self.connection.messages['EFI_STATUS'].fuel_consumed)* 100 
+            if len(fuel_list)<2:
+                fuel_list.append(used_total)
+            else:
+                used_delta = fuel_list[1] - fuel_list[0] 
+                fuel_list.pop(0)                                  
         except:
-            used = 0
-            
-        
-        new_level = ids.level.value - used
-        ids.level.value = new_level
+            used_delta = 0 
+                      
+        level = ids.level.value
+        used_list = [level] # initialize the list with beginning fuel level
+        if len(used_list) < 2:
+            used_list.append(used_delta)
+            current_level = used_list[0] - used_list[1]
+            used_list.append(current_level)
+            used_list.pop(0)       
+         
+        ids.level.value = current_level
             
         # Fuel level warning
         level_warn=ids.fuel_warn
-        if new_level < 25:
+        if current_level < 25:
             ids.level.shadow_color = _hex_colors['yellow']            
             self.warn_mgr(level_warn, 'yellow')
         else:
