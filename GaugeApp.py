@@ -93,7 +93,7 @@ class GaugeApp(App):
         
     # Fuel level calc<-- if available
         try: 
-            used = (self.connection['EFI_STATUS'].fuel_consumed)* 100                        
+            used = (self.connection.messages['EFI_STATUS'].fuel_consumed)* 100                        
         except:
             used = 0
             
@@ -111,7 +111,7 @@ class GaugeApp(App):
             self.warn_mgr(level_warn, 'green')            
         
         # Fuel Flow<-- if available
-        try:
+        try: 
             ids.flow.value = self.connection.messages['EFI_STATUS'].fuel_flow
         except:
             ids.flow.value = 0
