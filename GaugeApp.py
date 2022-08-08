@@ -56,8 +56,7 @@ class GaugeApp(App):
         if color == 'red':
             id.background_color = _rgba_colors['red']
 
-            # This set values and defines ranges for the primary gauges
-
+    # This sets values and defines ranges for the primary gauges
     def primary_update(self, dt):
         ids = self.root.ids
 
@@ -66,7 +65,7 @@ class GaugeApp(App):
             tach_val = self.connection.messages['EFI_STATUS'].rpm
             ids.tach.value = tach_val
         except:
-            tach_value = 0
+            tach_val = 0
             # ids.TACH.cadran_color = _hex_colors['red'] <-REMOVE COMMENT AFTER TESTING                                      
 
         # CHT value
@@ -82,7 +81,7 @@ class GaugeApp(App):
         if cht_val >= 80 and cht_val <= 180:
             self.warn_mgr(temp_warn, 'green')
 
-        if cht_val >= 180.001 and tach_val <= 190:
+        if cht_val >= 180.001 and cht_val <= 190:
             self.warn_mgr(temp_warn, 'yellow')
 
         if cht_val >= 190.001:
@@ -112,8 +111,11 @@ class GaugeApp(App):
             used_list.append(current_level)
             used_list.pop(0)
 
-        ids.level.value = current_level
-
+        if current_level >= 0:
+            ids.level.value = current_level
+        else:
+            ids.level.value = 0
+        
         # Fuel level warning
         level_warn = ids.fuel_warn
         if current_level < 25:
@@ -138,7 +140,15 @@ class GaugeApp(App):
 
     def fuel_level_set(self, set_fuel):
         ids = self.root.ids
-        ids.level.value = set_fuel
+
+        if set_fuel in range (0,101):
+            ids.level.value = set_fuel
+        elif set_fuel > 100:
+            ids.level.value = 100
+        elif set_fuel < 0:
+            ids.level.value = 0
+        
+        
         ids.temp_warn.text = 'Temp'
         ids.batt_warn.text = 'Batt'
 

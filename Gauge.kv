@@ -163,9 +163,11 @@ BoxLayout:
             text: 'Save'
             on_release:
                 value_text = (fuel_in.text)
-                app.fuel_level_set(float(value_text))                               
-                root.dismiss()
-
+                if value_text == '': pass                    
+                else: app.fuel_level_set(float(value_text)), root.dismiss()         
+                                                   
+                    
+                
 
 
        
