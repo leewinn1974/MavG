@@ -1,9 +1,4 @@
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
 from kivy_garden.speedmeter import SpeedMeter
 from kivy.clock import Clock
 from pymavlink import mavutil
@@ -26,8 +21,7 @@ class GaugeApp(App):
     def __init__(self, **kwargs):
         super(GaugeApp, self).__init__(**kwargs)
 
-        # Begin the MAVLINK connection
-
+    # Begin the MAVLINK connection
     def start_connection(self):
         ids = self.root.ids
         connection_attempts = 0
@@ -94,8 +88,7 @@ class GaugeApp(App):
         if cht_val >= 190.001:
             self.warn_mgr(temp_warn, 'red')
 
-            # This sets values and defines ranges for the secondary indicators
-
+    # This sets values and defines ranges for the secondary indicators
     def secondary_update(self, dt):
         ids = self.root.ids
 
@@ -130,7 +123,7 @@ class GaugeApp(App):
             ids.level.shadow_color = _hex_colors['green']
             self.warn_mgr(level_warn, 'green')
 
-            # Fuel Flow<-- if available
+        # Fuel Flow<-- if available
         try:
             ids.flow.value = self.connection.messages['EFI_STATUS'].fuel_flow
         except:
@@ -150,7 +143,6 @@ class GaugeApp(App):
         ids.batt_warn.text = 'Batt'
 
     def scheduler(self, dt):
-
         Clock.schedule_interval(self.primary_update, 1 / 200)
         Clock.schedule_interval(self.secondary_update, 1 / 2)
 
