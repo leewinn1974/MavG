@@ -33,8 +33,8 @@ class GaugeApp(App):
             try:
                 self.connection = mavutil.mavlink_connection('tcp:localhost:14550')
                 self.connection.wait_heartbeat()
-                ids.link.text = 'Connected'
-                self.warn_mgr(link_warn, 'green')
+                ids.link.text = 'Connected'                
+                self.warn_mgr(link_warn, 'green')                
                 Clock.schedule_once(self.scheduler, 0.1)
 
             except:
@@ -62,20 +62,20 @@ class GaugeApp(App):
 
         # Tach value
         try:
-            tach_val = self.connection.messages['EFI_STATUS'].rpm
-            ids.tach.value = tach_val
+            tach_val = self.connection.messages['EFI_STATUS'].rpm            
         except:
-            tach_val = 0
+            tach_val = 0            
             # ids.TACH.cadran_color = _hex_colors['red'] <-REMOVE COMMENT AFTER TESTING                                      
+        ids.tach.value = tach_val
 
         # CHT value
         try:
-            cht_val = self.connection.messages['EFI_STATUS'].cylinder_head_temperature
-            ids.cht.value = cht_val
-        except:
-            cht_val = 0
+            cht_val = self.connection.messages['EFI_STATUS'].cylinder_head_temperature            
+        except:            
+            cht_val = 0        
             # ids.cht.cadran_color = _hex_colors['red'] <-REMOVE COMMENT AFTER TESTING       
 
+        ids.cht.value = cht_val
         # Set CHT ranges and call warn_mgr - CURRENT RANGES FOR TESTING ONLY
         temp_warn = ids.temp_warn
         if cht_val >= 80 and cht_val <= 180:
