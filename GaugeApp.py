@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy_garden.speedmeter import SpeedMeter
 from kivy.clock import Clock
 from pymavlink import mavutil
+from sys import platform
 
 # Sets up the fuel gauge text
 _fuel_marks = {25: '1/4', 50: '1/2', 75: '3/4'}
@@ -28,10 +29,15 @@ class GaugeApp(App):
         link_warn = ids.link
         ids.link.disabled = True
 
+        if platform == 'linux' or platform == 'linux2':
+            connection_str = 'udpin:localhost:14550'
+        elif platform == 'win32':
+            connection_str = 'tcp:localhost:14550'
+
         while connection_attempts < 3:
             connection_attempts += 1
             try:
-                self.connection = mavutil.mavlink_connection('tcp:localhost:14550')
+                self.connection = mavutil.mavlink_connection(connection_str)
                 self.connection.wait_heartbeat()
                 ids.link.text = 'Connected'                
                 self.warn_mgr(link_warn, 'green')                
