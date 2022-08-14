@@ -2,7 +2,7 @@ from kivy.app import App
 from kivy_garden.speedmeter import SpeedMeter
 from kivy.clock import Clock
 from pymavlink import mavutil
-from sys import platform
+#from sys import platform
 
 # Sets up the fuel gauge text
 _fuel_marks = {25: '1/4', 50: '1/2', 75: '3/4'}
@@ -14,7 +14,7 @@ class FuelMarksSpeedMeter(SpeedMeter):
 
 
 _rgba_colors = {'green': [0, 255, 0, 0.7], 'yellow': [255, 255, 0, 1], 'red': [255, 0, 0, 1],
-                'black': [0, 0, 0]}
+                'black': [0, 0, 0], 'cold' : [0, 255, 255]}
 _hex_colors = {'green': '00ff00', 'yellow': '#ffff00', 'red': '#ff0000'}
 
 
@@ -26,41 +26,36 @@ class GaugeApp(App):
     def start_connection(self):
         ids = self.root.ids
         connection_attempts = 0
-        link_warn = ids.link
-        ids.link.disabled = True
+        link_warn = ids.link        
+        #ids.link.disabled = True <----This is BAD. Causing Mission Planner to hang.
 
-        if platform == 'linux' or platform == 'linux2':
-            connection_str = 'udpin:localhost:14550'
-        elif platform == 'win32':
-            connection_str = 'tcp:localhost:14550'
+        # if platform == 'linux' or platform == 'linux2':
+        #     connection_str = 'udpin:localhost:14550'
+        # elif platform == 'win32':
+        #     connection_str = 'tcp:localhost:14550'
 
-        while connection_attempts < 3:
-            connection_attempts += 1
-            try:
-                self.connection = mavutil.mavlink_connection(connection_str)
-                self.connection.wait_heartbeat()
-                ids.link.text = 'Connected'                
-                self.warn_mgr(link_warn, 'green')                
-                Clock.schedule_once(self.scheduler, 0.1)
+        # while connection_attempts < 3:
+        #     connection_attempts += 1
+        try:
+            self.connection = mavutil.mavlink_connection('tcp:localhost:14550')
+            self.connection.wait_heartbeat()
+            ids.link.text = 'Connected'                
+            self.warn_mgr(link_warn, 'green')                
+            Clock.schedule_once(self.scheduler, 0.1)
+            
 
-            except:
-                ids.link.text = 'Retry?'
-                self.warn_mgr(link_warn, 'red')
-                ids.link.disabled = False
-                # Needs "Connection Failed" PopUp
+        except:
+            ids.link.text = 'Retry?'
+            self.warn_mgr(link_warn, 'red')
+            ids.link.disabled = False
+            # Needs "Connection Failed" PopUp
 
     # This manages the color of the warning "lights" at the top of the panel        
     def warn_mgr(self, id, color):
+        
         id.color = _rgba_colors['black']  # Sets the button text color to black
-
-        if color == 'green':
-            id.background_color = _rgba_colors['green']
-
-        if color == 'yellow':
-            id.background_color = _rgba_colors['yellow']
-
-        if color == 'red':
-            id.background_color = _rgba_colors['red']
+        
+        id.background_color = _rgba_colors[color]
 
     # This sets values and defines ranges for the primary gauges
     def primary_update(self, dt):
@@ -68,22 +63,26 @@ class GaugeApp(App):
 
         # Tach value
         try:
-            tach_val = self.connection.messages['EFI_STATUS'].rpm            
+            ids.tach.value = self.connection.recv_match(type='GPS_RAW_INT', blocking=False).alt/200     
         except:
             tach_val = 0            
             # ids.TACH.cadran_color = _hex_colors['red'] <-REMOVE COMMENT AFTER TESTING                                      
-        ids.tach.value = tach_val
+        # ids.tach.value = tach_val
 
         # CHT value
         try:
-            cht_val = self.connection.messages['EFI_STATUS'].cylinder_head_temperature            
+            ids.cht.value = self.connection.recv_match(type='GPS_RAW_INT', blocking=False).vel/10           
         except:            
             cht_val = 0        
             # ids.cht.cadran_color = _hex_colors['red'] <-REMOVE COMMENT AFTER TESTING       
-
-        ids.cht.value = cht_val
+        cht_val = ids.cht.value
+        #ids.cht.value = cht_val
         # Set CHT ranges and call warn_mgr - CURRENT RANGES FOR TESTING ONLY
         temp_warn = ids.temp_warn
+        
+        if cht_val >= -0.1 and cht_val < 180:
+            self.warn_mgr(temp_warn, 'cold')
+            
         if cht_val >= 80 and cht_val <= 180:
             self.warn_mgr(temp_warn, 'green')
 
@@ -100,14 +99,14 @@ class GaugeApp(App):
         # Fuel level calc<-- if available
         try:
             fuel_list = []
-            used_total = (self.connection.messages['EFI_STATUS'].fuel_consumed) * 100
+            used_total = (self.connection.recv_match(type='EFI_STATUS', blocking=False).fuel_consumed) * 100
             if len(fuel_list) < 2:
                 fuel_list.append(used_total)
             else:
                 used_delta = fuel_list[1] - fuel_list[0]
                 fuel_list.pop(0)
         except:
-            used_delta = 0
+            used_delta = .5
 
         level = ids.level.value
         used_list = [level]  # initialize the list with beginning fuel level
@@ -124,7 +123,10 @@ class GaugeApp(App):
         
         # Fuel level warning
         level_warn = ids.fuel_warn
-        if current_level < 25:
+        if current_level < 10:
+            ids.level.shadow_color = _hex_colors['red']
+            self.warn_mgr(level_warn, 'red')
+        elif current_level >=10 and current_level <= 25:
             ids.level.shadow_color = _hex_colors['yellow']
             self.warn_mgr(level_warn, 'yellow')
         else:
@@ -133,9 +135,9 @@ class GaugeApp(App):
 
         # Fuel Flow<-- if available
         try:
-            ids.flow.value = self.connection.messages['EFI_STATUS'].fuel_flow
+            ids.flow.value = (self.connection.recv_match(type='GPS_RAW_INT', blocking=True).vel) / 400
         except:
-            ids.flow.value = 0
+            ids.flow.value = 0            
             # ids.flow.cadran_color = _hex_colors['red'] <-REMOVE COMMENT AFTER TESTING
 
         # Battery1
@@ -159,8 +161,8 @@ class GaugeApp(App):
         ids.batt_warn.text = 'Batt'
 
     def scheduler(self, dt):
-        Clock.schedule_interval(self.primary_update, 1 / 200)
-        Clock.schedule_interval(self.secondary_update, 1 / 2)
+        Clock.schedule_interval(self.primary_update, 1/200)
+        Clock.schedule_interval(self.secondary_update, 1/2)
 
 
 def main():
