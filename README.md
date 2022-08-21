@@ -15,4 +15,5 @@ The indicators can be tested using Mission Planner on windows machines:
 Testing under Linux requires the Ardupilot SITL to be running.
 
 https://mavlink.io/en/getting_started/installation.html
+
 https://kivy.org/doc/stable/gettingstarted/installation.html
