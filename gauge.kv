@@ -14,7 +14,7 @@ BoxLayout:
         rows_default_height: 40   
         padding: 3     
 
-        Button:
+        Button: # Connect
             id: link
             size_hint_y: None
             height: 35          
@@ -27,26 +27,24 @@ BoxLayout:
                 self.text = 'Trying'                
             on_release: app.start_connection()          
 
-        Button:
+        Button: # Fuel Set/Warning
             id: fuel_warn    
             size_hint_y: None
             height: 35
-            text: 'Set Fuel'
+            text: 'Set Fuel'                      
             on_press:
                 self.text = 'Fuel'
             on_release: Factory.fuelPopup().open()
 
-        Button:
+        Button: # Temp Warning
             id: temp_warn            
             size_hint_y: None
-            height: 35
-            # text: 'Temp'
+            height: 35            
 
-        Button:
+        Button: # Batt Warning
             id: batt_warn
             size_hint_y: None
-            height: 35
-            # text: 'Batt'          
+            height: 35                      
 
     # Main indicator area
     BoxLayout:
@@ -55,7 +53,7 @@ BoxLayout:
         spacing: -400   
         padding: 3  
 
-        SpeedMeter:
+        SpeedMeter: # Tach
             id: tach                
             max: 10
             tick: 1
@@ -63,12 +61,12 @@ BoxLayout:
             display_first: False
             display_last: False
             end_angle: 90
-            label: 'RPM x1000'
+            label: 'Tach\n' + '%d' % (self.value*1000) + ' RPM'
             needle_color: '#FFA500'
-            sectors: [3, '#ffffff', 3.2, '#00ff00', 8, '#ffff00', 8.5, '#ff0000', 8.8]            
+            sectors: [3, '#ffffff', 3.2, '#00ff00', 8, '#ffff00', 8.5, app.hex_colors['red'], 8.8]            
             sector_width: 4
 
-        SpeedMeter:
+        SpeedMeter: # CHT
             id: cht                
             max: 360
             tick: 60
@@ -81,7 +79,7 @@ BoxLayout:
             sectors: [77, '#ffffff', 80, '#00ff00', 180, '#ffff00', 200, '#ff0000', 220]            
             sector_width: 4   
 
-    # Seconday Indicators - Indicator types (id) can be changed to fit whatever is needed
+    # Secondary Indicators - Indicator types (id) can be changed to fit whatever is needed
     GridLayout:
         cols: 2
         padding: 6
@@ -91,7 +89,7 @@ BoxLayout:
             spacing: -250
             padding: 3
             
-            FuelMarksSpeedMeter:
+            FuelGauge: # Fuel Gauge
                 id: level
                 label: 'Fuel Level'
                 tick: 25
@@ -102,11 +100,11 @@ BoxLayout:
                 display_last: False                
                 needle_color: '#FFA500'
 
-            SpeedMeter:
+            SpeedMeter: # Fuel Flow
                 id: flow                
                 max:10
                 tick: 2
-                label: 'Fuel Flow\n' + '   %d' % (self.value) + ' l/h'                
+                label: 'Fuel Flow\n' + '  %.1f' % (self.value) + ' l/h'                
                 start_angle: 270
                 end_angle: 90
                 display_first: False
@@ -118,9 +116,9 @@ BoxLayout:
             spacing: -250
             padding: 3
 
-            SpeedMeter:
+            SpeedMeter: # Battery 1
                 id: batt1
-                label: 'Battery 1'
+                label: 'Battery 1\n' + '%.2f' % (self.value) + 'V'
                 max: 60
                 tick: 10
                 subtick: 2
@@ -130,9 +128,9 @@ BoxLayout:
                 display_last: False
                 needle_color: '#FFA500'
 
-            SpeedMeter:
+            SpeedMeter: # Battery 2
                 id: batt2                
-                label: 'Battery 2'
+                label: 'Battery 2\n' + '%.2f' % (self.value) +'V'
                 max: 30
                 tick: 5
                 subtick: 2
@@ -142,7 +140,7 @@ BoxLayout:
                 display_last: False
                 needle_color: '#FFA500'
 
-<fuelPopup@Popup>:
+<fuelPopup@Popup>: # Sets fuel level
     auto_dismiss: False
     title: 'Fuel Set'
     size_hint: (None, None)
