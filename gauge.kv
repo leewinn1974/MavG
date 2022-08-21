@@ -118,26 +118,28 @@ BoxLayout:
 
             SpeedMeter: # Battery 1
                 id: batt1
-                label: 'Battery 1\n' + '%.2f' % (self.value) + 'V'
-                max: 60
-                tick: 10
-                subtick: 2
+                min: 36
+                max: 52
+                tick: 4
+                subtick: 4
                 start_angle: -90
                 end_angle: 90
                 display_first: False
                 display_last: False
+                label: 'Battery 1'
                 needle_color: '#FFA500'
 
             SpeedMeter: # Battery 2
-                id: batt2                
-                label: 'Battery 2\n' + '%.2f' % (self.value) +'V'
-                max: 30
-                tick: 5
-                subtick: 2
+                id: batt2                              
+                min: 10
+                max: 13
+                tick: 1
+                subtick: 5
                 start_angle: 270
                 end_angle: 90
                 display_first: False
                 display_last: False
+                label: 'Battery 2'
                 needle_color: '#FFA500'
 
 <fuelPopup@Popup>: # Sets fuel level
