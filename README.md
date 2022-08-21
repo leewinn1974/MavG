@@ -1,11 +1,7 @@
 # MavG
  Indicator Project
 
-So far the main project only has textual indicators. 
-
-Graphical indicator examples and attempts are in the example code folder.
-
-Kivy and mavlink must be installed
+Kivy, Kivy-Garden, Kivy Speedmeter and Mavlink must be installed
 
 The indicators can be tested using Mission Planner on windows machines:
  Open a simulator 
@@ -15,4 +11,5 @@ The indicators can be tested using Mission Planner on windows machines:
 Testing under Linux requires the Ardupilot SITL to be running.
 
 https://mavlink.io/en/getting_started/installation.html
+
 https://kivy.org/doc/stable/gettingstarted/installation.html
