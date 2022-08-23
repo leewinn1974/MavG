@@ -186,13 +186,13 @@ class GaugeApp(App):
         batt_warn = ids.batt_warn
         warn = 3.7 # Volts per cell
         crit = 3.5 # Volts per cell
-        warn_color = ''
+        warn_color = 'green'
 
         if batt1_volts > warn*12:
-            self.warn_mgr(batt_warn, 'green', 1, 'green', 1)
+            self.warn_mgr(batt_warn, warn_color, 1, 'green', 1)
 
         if batt2_volts > warn*3:
-            self.warn_mgr(batt_warn, 'green', 1, 'green', 2)            
+            self.warn_mgr(batt_warn, warn_color, 1, 'green', 2)            
 
         if batt1_volts <= warn*12 or batt2_volts <= warn*3:
             warn_color = 'yellow'
