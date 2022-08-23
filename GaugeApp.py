@@ -5,6 +5,7 @@ from pymavlink import mavutil
 from sys import platform
 
 
+
 # Sets up the fuel gauge text
 class FuelGauge(SpeedMeter):
     fuel_marks = {25: '1/4', 50: '1/2', 75: '3/4'}
@@ -169,9 +170,9 @@ class GaugeApp(App):
         
         # This will need a calculation to to translate liters to percent once fuel cell size is final.
         if set_fuel > 100:            
-            ids.level.value = 100
+            self.initial_fuel_level = 100
         elif set_fuel < 0:
-            ids.level.value = 0
+            self.initial_fuel_level = 0
         else:            
             ids.level.value = set_fuel
             self.initial_fuel_level = set_fuel
